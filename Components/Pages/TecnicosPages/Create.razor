@@ -1,0 +1,134 @@
+﻿@page "/CreateTecnico"
+@page "/CreateTecnico/{TecnicoId:int}"
+@inject TecnicosServices tecnicosBLL
+@inject NavigationManager navigationManager
+@inject IJSRuntime jsRuntime
+@rendermode InteractiveServer
+
+<PageTitle>Registro de T&eacute;cnicos</PageTitle>
+<EditForm Model="tecnico" OnValidSubmit="Guardar" FormName="tecnicoForm">
+    <DataAnnotationsValidator />
+    <div class="container">
+        <div class="card-header">
+            <h1>Registro de T&eacute;cnicos</h1>
+        </div>
+        <div class="card-body">
+            <div class=" col-2">
+                <label>TecnicoId:</label>
+                <div class="id-input">
+                    <InputNumber @bind-Value="tecnico.TecnicoId" readonly class="form-control"></InputNumber>
+                </div>
+            </div>
+            
+            @if (Encontrado)
+            {
+                <p class="text-danger">No se encontro el t&eacute;cnico</p>
+            }
+
+            <div class="col-md-6">
+                <label>Nombres:</label>
+                <InputText @bind-Value="tecnico.Nombres" class="form-control"></InputText>
+                <ValidationMessage For="@(() => tecnico.Nombres)" />
+            </div>
+            @if (nombreExistente)
+            {
+                <p class="text-danger">Ya existe un t&eacute;cnico con este nombre</p>
+            }
+
+            <div class="col-md-6">
+                <label>Sueldo por hora:</label>
+                <InputNumber @bind-Value="tecnico.SueldoHora" min ="1"class="form-control"></InputNumber>
+                <ValidationMessage For="@(() => tecnico.SueldoHora)" />
+            </div>
+
+        </div>
+        <div class="card-footer d-flex justify-content-between">
+            <button type="button" class="btn btn-primary" @onclick="() => Guardar()">
+                <span>Crear <i class="bi bi-file-earmark" /></span>
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="window.location.href='/DetailsTecnicos'">
+                <span>Volver a Consulta</span> <i class="bi bi-arrow-return-left" />
+            </button>
+        </div>
+
+        @if (Eliminado)
+        {
+            <p class="text-success">Se elimino el t&eacute;cnico correctamente</p>
+
+        }
+
+        @if (Guardado)
+        {
+            <p class="text-success">Se guardo el t&eacute;cnico correctamente</p>
+        }
+    </div>
+
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public int TecnicoId { get; set; }
+    public Tecnicos tecnico { get; set; } = new Tecnicos();
+
+
+    private bool nombreExistente = false;
+    private bool rncExistente = false;
+    public bool Encontrado { get; set; } = false;
+    public bool Eliminado { get; set; } = false;
+    public bool Guardado { get; set; } = false;
+
+
+    public async Task Buscar()
+    {
+        var encontrado = await tecnicosBLL.Buscar(tecnico.TecnicoId);
+        if (encontrado != null)
+        {
+            tecnico = encontrado;
+            Encontrado = false;
+            Eliminado = false;
+            Guardado = false;
+        }
+        else
+            Encontrado = true;
+
+    }
+
+    public void Guardar()
+    {
+
+        if (Validar())
+            return;
+
+        var guardo = tecnicosBLL.Guardar(this.tecnico);
+
+        Guardado = true;
+        Eliminado = false;
+        Nuevo();
+
+    }
+
+    public void Nuevo()
+    {
+        this.tecnico = new Tecnicos();
+        nombreExistente = false;
+        rncExistente = false;
+    }
+
+    public bool Validar()
+    {
+        nombreExistente = tecnicosBLL.Listar(t => t.Nombres == tecnico.Nombres && TecnicoId != tecnico.TecnicoId).Any();
+        return nombreExistente || rncExistente;
+    }
+
+    public async void Eliminar()
+    {
+        if (tecnico.TecnicoId > 0)
+        {
+            await tecnicosBLL.Eliminar(tecnico);
+            Nuevo();
+        }
+        Eliminado = true;
+        Guardado = false;
+    }
+}
