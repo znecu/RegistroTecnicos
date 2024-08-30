@@ -17,3 +17,4 @@ public class Tecnicos
 
     public decimal SueldoHora { get; set; }
 }
+
