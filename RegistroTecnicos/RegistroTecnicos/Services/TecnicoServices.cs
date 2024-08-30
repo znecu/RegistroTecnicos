@@ -16,19 +16,25 @@ public class TecnicoServices
 
     //métodos
 
-    public async Task <bool> Existe(int tecnicoId)
+    private async Task <bool> Existe(int tecnicoId)
     {
         return await _contexto.Tecnicos
             .AnyAsync(t => t.TecnicoId == tecnicoId);
     }
 
-    public async Task<bool> Insertar(Tecnicos tecnico)
+    public async Task<bool> ExisteTecnico(int tecnicoId, string nombre)
+    {
+        return await _contexto.Tecnicos
+            .AnyAsync(e => e.TecnicoId != tecnicoId && e.NombreTecnico.ToLower().Equals(nombre.ToLower()));
+
+    }
+    private async Task<bool> Insertar(Tecnicos tecnico)
     {
         _contexto.Tecnicos.Add(tecnico);
         return await _contexto.SaveChangesAsync() > 0;
     }
 
-    public async Task<bool> Modificar(Tecnicos tecnico)
+    private async Task<bool> Modificar(Tecnicos tecnico)
     {
         _contexto.Update(tecnico);
         return await _contexto
