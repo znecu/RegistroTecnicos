@@ -1,0 +1,129 @@
+﻿@page "/Tecnicos/Index"
+@inject TecnicoServices tecnicoServices
+@rendermode InteractiveServer
+
+<PageTitle> </PageTitle>
+<div class="container">
+    <div class=" shadow-lg">
+
+        @*Header*@
+        <div class=" card-header text-center"
+            <h1><strong> Registro de T&eacute;nico</strong></h1>
+        </div>
+
+        @*Body*@
+        <div class="card-body">
+            <div class="row">
+
+                @*Filtrar*@
+                <div class="col-3">
+                    <label class="form-lebel"><strong>Filtrar: </strong></label>
+                </div>
+
+                @*ValorFiltro*@
+                <div class="col-3">
+                    <label class="form-label"><strong>Buscar</strong></label>
+                </div>
+            </div>
+
+            @*Botones e Inputs*@
+            <div class="row text-end">
+
+                @*Filtro*@
+                <div class="col-3">
+                    <InputSelect class=" form-select" @bind-Value="Filtro">
+                        <option value="" selected disabled>Elija una opci&oacute;n </option>
+                        <option value="Id">Id</option>
+                        <option value="Nombre">Nombre</option>
+                    </InputSelect>
+                </div>
+
+                @*Buscar*@
+                <div class="col-3">
+                    <div class="input-group">
+                        <input class="form-control" @bind="ValorFiltro" placeholder="Buscar" />
+                        <button type="button" class=" btn btn-outline-primary bi bi-search" @onclick=Buscar></button>
+                    </div>
+                </div>
+
+                @*Crear*@
+                <div class="col text-end">
+                    <a href="/Tecnico/Create"><button type="button" class="btn btn-success bi bi-person-plus-fill"> Crear</button></a>
+                </div>
+            </div>
+
+            @*Tabla*@
+            <table class="table table-bordered text-center mt-5">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nombre</th>
+                        <th>Sueldo por Hora</th>
+                        <th>Ver</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var tecnico in ListaTecnico)
+                    {
+                        <tr>
+                            <td>@tecnico.TecnicoId</td>
+                            <td>@tecnico.NombreTecnico</td>
+                            <td>@tecnico.SueldoHora</td>
+
+                            @*Ver*@
+                            <td>
+                                <a href="Tecnico/Details/@tecnico.TecnicoId"><button type="button" class=" btn btn-outline-info bi bi-eye "></button></a>
+                            </td>
+
+                            @*Editar*@
+                            <td>
+                                <a href="Tecnico/Edit/@tecnico.TecnicoId"><button type="button" class=" btn btn-outline-warning bi bi-pencil"></button></a>
+                            </td>
+
+                            @*Eliminar*@
+                            <td>
+                                <a href="Tecnico/Delete/@tecnico.TecnicoId"><button type="button" class=" btn btn-outline-danger bi bi-trash3  "></button></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card-footer">
+            <p><strong>Cantidad de T&eacute;cnicos: </strong>@ListaTecnico.Count</p>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    public List<Tecnicos> ListaTecnico { get; set; } = new List<Tecnicos>();
+    public string Filtro { get; set; } = string.Empty;
+    public string ValorFiltro = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaTecnico = await tecnicoServices.Listar(t => t.TecnicoId > 0);
+    }
+
+    private async Task Buscar()
+    {
+        if (ValorFiltro.Trim() != "")
+        {
+            if (Filtro == "Id" && int.TryParse(ValorFiltro, out int tecnicoId))
+                ListaTecnico = await tecnicoServices.Listar(t => t.TecnicoId == tecnicoId);
+
+            else if (Filtro == "Nombre")
+                ListaTecnico = await tecnicoServices.Listar(t => t.NombreTecnico.ToLower().Contains(ValorFiltro.ToLower()));
+        }
+        else
+        {
+            ListaTecnico = await tecnicoServices.Listar(t => true);
+        }
+    }
+
+}
