@@ -8,7 +8,7 @@ public class Tecnicos
     public int TecnicoId { get; set; }
 
     [Required(ErrorMessage = "Este campo obligatorio. ")]
-    [RegularExpression(@"^[a-zA-z]+$", ErrorMessage = "En este campo solo se permiten letras. ")]
+    [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "En este campo solo se permiten letras. ")]
     public string? NombreTecnico { get; set; }
 
 
