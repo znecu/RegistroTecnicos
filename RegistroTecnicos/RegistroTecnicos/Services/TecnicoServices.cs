@@ -16,7 +16,7 @@ public class TecnicoServices
 
     //métodos
 
-    private async Task <bool> Existe(int tecnicoId)
+    private async Task<bool> Existe(int tecnicoId)
     {
         return await _contexto.Tecnicos
             .AnyAsync(t => t.TecnicoId == tecnicoId);
@@ -25,7 +25,8 @@ public class TecnicoServices
     public async Task<bool> ExisteTecnico(int tecnicoId, string nombre)
     {
         return await _contexto.Tecnicos
-            .AnyAsync(e => e.TecnicoId != tecnicoId && e.NombreTecnico.ToLower().Equals(nombre.ToLower()));
+            .AnyAsync(e => e.TecnicoId != tecnicoId &&
+                e.NombreTecnico.ToLower().Equals(nombre.ToLower()));
 
     }
     private async Task<bool> Insertar(Tecnicos tecnico)
@@ -43,7 +44,7 @@ public class TecnicoServices
 
     public async Task<bool> Guardar(Tecnicos tecnico)
     {
-        if(!await Existe(tecnico.TecnicoId))
+        if (!await Existe(tecnico.TecnicoId))
             return await Insertar(tecnico);
         else
             return await Modificar(tecnico);
