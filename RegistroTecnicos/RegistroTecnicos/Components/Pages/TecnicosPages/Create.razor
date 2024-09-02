@@ -4,7 +4,7 @@
 @rendermode InteractiveServer
 
 <PageTitle>Create</PageTitle>
-<EditForm Model="Tecnico">
+<EditForm Model="Tecnico" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
     <div class="container">
         <div class="shadow-lg">
@@ -32,35 +32,24 @@
                 @*SueldoHora*@
                 <div class="col-2 mt-2">
                     <label class="form-label"><strong>Sueldo por hora</strong></label>
-                    <InputNumber class="form-control" @bind-Value="Tecnico.SueldoHora" step="0.1" min="0"></InputNumber>
+                    <InputNumber class="form-control" @bind-Value="Tecnico.SueldoHora"></InputNumber>
+                    <ValidationMessage For="(()=> Tecnico.SueldoHora)"/>
                 </div>
             </div>
 
             @*Footer*@
             <div class="card-footer text-center">
-                <button type="button" class="btn btn-primary " @onclick="Volver">Volver</button>
+                <button type="button" class="btn btn-primary " @onclick="() => Volver()">Volver</button>
                 <button type="submit" class="btn btn-success" @onclick="() => Guardar()"> Guardar</button>
             </div>
         </div>
-        @Mensaje
     </div>
 </EditForm>
 
 
 @code {
     public Tecnicos Tecnico { get; set; } = new Tecnicos();
-    public string Mensaje = string.Empty;
-
-    private async Task<bool> Validar()
-    {
-        var existe = await tecnicoServices.ExisteTecnico(Tecnico.TecnicoId, Tecnico.NombreTecnico);
-        return existe;
-    }
-
-    public void Volver()
-    {
-        navigationManager.NavigateTo("/Tecnicos/Index");
-    }
+    public string Mensaje { get; set; } = string.Empty;
 
     public async Task Guardar()
     {
@@ -75,7 +64,7 @@
         if (crear)
         {
             Mensaje = "Creado exitosamente.";
-            Volver();
+            
         }
 
         else
@@ -83,4 +72,16 @@
             Mensaje = "No se ha podido crear el técnico.";
         }
     }
+
+    private async Task<bool> Validar()
+    {
+        var existe = await tecnicoServices.ExisteTecnico(Tecnico.TecnicoId, Tecnico.NombreTecnico);
+        return existe;
+    }
+
+    public void Volver()
+    {
+        navigationManager.NavigateTo("/Tecnicos/Index");
+    }
+
 }
