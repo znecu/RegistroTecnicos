@@ -25,8 +25,8 @@
                 @*Nombre*@
                 <div class="col-2 mt-2">
                     <label class="form-label"><strong>Nombre</strong></label>
-                    <InputText class="form-control" @bind-Value="Tecnico.NombreTecnico"></InputText>
-                    <ValidationMessage For="(()=> Tecnico.NombreTecnico)"/>
+                    <InputText class="form-control" @bind-Value="Tecnico.Nombres"></InputText>
+                    <ValidationMessage For="(()=> Tecnico.Nombres)"/>
                 </div>
 
                 @*SueldoHora*@
@@ -40,7 +40,7 @@
             @*Footer*@
             <div class="card-footer text-center">
                 <button type="button" class="btn btn-primary " @onclick="() => Volver()">Volver</button>
-                <button type="submit" class="btn btn-success" @onclick="() => Guardar()"> Guardar</button>
+                <button type="submit" class="btn btn-success"> Guardar</button>
             </div>
         </div>
     </div>
@@ -64,7 +64,8 @@
         if (crear)
         {
             Mensaje = "Creado exitosamente.";
-            
+            navigationManager.NavigateTo("/Tecnicos/Index");
+
         }
 
         else
@@ -75,7 +76,7 @@
 
     private async Task<bool> Validar()
     {
-        var existe = await tecnicoServices.ExisteTecnico(Tecnico.TecnicoId, Tecnico.NombreTecnico);
+        var existe = await tecnicoServices.ExisteTecnico(Tecnico.TecnicoId, Tecnico.Nombres);
         return existe;
     }
 

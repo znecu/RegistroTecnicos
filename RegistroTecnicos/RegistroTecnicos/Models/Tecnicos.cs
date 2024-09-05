@@ -9,7 +9,7 @@ public class Tecnicos
 
     [Required(ErrorMessage = "Este campo obligatorio. ")]
     [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "En este campo solo se permiten letras. ")]
-    public string? NombreTecnico { get; set; }
+    public string? Nombres { get; set; }
 
 
     [Required(ErrorMessage = "Este campo es obligatorio. ")]

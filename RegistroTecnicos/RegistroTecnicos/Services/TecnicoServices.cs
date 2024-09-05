@@ -25,8 +25,8 @@ public class TecnicoServices
     public async Task<bool> ExisteTecnico(int tecnicoId, string nombre)
     {
         return await _contexto.Tecnicos
-            .AnyAsync(e => e.TecnicoId != tecnicoId &&
-                e.NombreTecnico.ToLower().Equals(nombre.ToLower()));
+            .AnyAsync(t => t.TecnicoId != tecnicoId &&
+                t.Nombres.ToLower().Equals(nombre.ToLower()));
 
     }
     private async Task<bool> Insertar(Tecnicos tecnico)
