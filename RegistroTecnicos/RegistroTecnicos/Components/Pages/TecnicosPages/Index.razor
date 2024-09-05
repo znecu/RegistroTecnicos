@@ -46,6 +46,10 @@
                         <button type="button" class=" btn btn-outline-primary bi bi-search" @onclick=Buscar></button>
                     </div>
                 </div>
+                @*Restablecer*@
+                <div class="col-3">
+                    <button type="button" class="btn btn-outline-secondary bi bi-arrow-clockwise" @onclick= "Restablecer" ></button>
+                </div>
 
                 @*Crear*@
                 <div class="col text-end">
@@ -107,7 +111,7 @@
 @code {
     public List<Tecnicos> ListaTecnico { get; set; } = new List<Tecnicos>();
     public string Filtro { get; set; } = string.Empty;
-    public string ValorFiltro = string.Empty;
+    public string ValorFiltro { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -128,6 +132,13 @@
         {
             ListaTecnico = await tecnicoServices.Listar(t => true);
         }
+    }
+
+    private async Task Restablecer()
+    {
+        ListaTecnico = await tecnicoServices.Listar(t => t.TecnicoId > 0);
+        Filtro = string.Empty;
+        ValorFiltro = string.Empty;
     }
 
 }
