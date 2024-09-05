@@ -9,7 +9,7 @@
 
         @*Header*@
         <div class=" card-header text-center"
-            <h1><strong> Registro de T&eacute;cnico</strong></h1>
+            <h1><strong> Registro de T&eacute;cnicos</strong></h1>
         </div>
 
         @*Body*@
@@ -59,7 +59,7 @@
             <table class="table table-bordered text-center mt-5">
                 <thead>
                     <tr>
-                        <th>Id</th>
+                        <th>TecnicoId</th>
                         <th>Nombre</th>
                         <th>Sueldo por Hora</th>
                         <th>Ver</th>
@@ -73,7 +73,7 @@
                     {
                         <tr>
                             <td>@tecnico.TecnicoId</td>
-                            <td>@tecnico.NombreTecnico</td>
+                            <td>@tecnico.Nombres</td>
                             <td>@tecnico.SueldoHora.ToString("C", CultureInfo.CreateSpecificCulture("en-US"))</td>
 
 
@@ -122,7 +122,7 @@
                 ListaTecnico = await tecnicoServices.Listar(t => t.TecnicoId == tecnicoId);
 
             else if (Filtro == "Nombre")
-                ListaTecnico = await tecnicoServices.Listar(t => t.NombreTecnico.ToLower().Contains(ValorFiltro.ToLower()));
+                ListaTecnico = await tecnicoServices.Listar(t => t.Nombres.ToLower().Contains(ValorFiltro.ToLower()));
         }
         else
         {
