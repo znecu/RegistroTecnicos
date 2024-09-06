@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RegistroTecnicos.Models;
 
@@ -16,5 +17,9 @@ public class Tecnicos
     [Range(minimum: 0.1, maximum: 500000, ErrorMessage = "Por favor, ingrese una cantidad mayor a 0 y menor o igual a $500,000. ")]
 
     public decimal SueldoHora { get; set; }
+
+    [ForeignKey("TiposTecnicosId")]
+    public int TiposTecnicosId {  get; set; }
+    public TiposTecnicos TiposTecnicos { get; set; }
 }
 
