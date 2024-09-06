@@ -1,0 +1,79 @@
+﻿@page "/TipoTecnico/Index"
+@inject TiposTecnicosServices tiposTecnicosServices
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Tipos de T&eacute;cnicos</PageTitle>
+<div class="container">
+    <div class="shadow-lg">
+
+        @*Header*@
+        <div class="card-header text-center">
+            <h1><strong>Tipos de t&eacute;cnicos</strong></h1>
+        </div>
+        @*Body*@
+        <div class="card-body">
+            <div class="row">
+
+                @*Crear*@
+                <div class="col text-end">
+                    <a href="/TipoTecnico/Create">
+                        <button type="button" class="btn btn-success bi bi-person-plus-fill">Crear </button>
+                    </a>
+
+                </div>
+                @*Tabla*@
+                <table class="table table-bordered text-center mt-5">
+                    <thead>
+                        <tr>
+                            <th>TiposTecnicosId</th>
+                            <th>Descripcion</th>
+                            <th>Ver</th>
+                            <th>Editar</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var tiposTecnicos in ListaTiposTecnicos)
+                        {
+                            <tr>
+                                <td>@tiposTecnicos.TiposTecnicosId</td>
+                                <td>@tiposTecnicos.Descripcion</td>
+
+                                @*Ver*@
+                                <td>
+                                    <a href="TipoTecnico/Details/@tiposTecnicos.TiposTecnicosId"><button type="button" class="btn btn-outline-info bi bi-eye"></button></a>
+                                </td>
+
+                                @*Editar*@
+                                <td>
+                                    <a href="TipoTecnico/Edit/@tiposTecnicos.TiposTecnicosId"><button type="button" class="btn btn-outline-warning bi bi-pencil"></button></a>
+                                </td>
+
+                                @*Eliminar*@
+                                <td>
+                                    <a href="TipoTecnico/Delete/@tiposTecnicos.TiposTecnicosId"><button type="button" class="btn btn-outline-danger bi bi-trash"></button></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-footer">
+    </div>
+
+</div>
+
+
+@code {
+    public List<TiposTecnicos> ListaTiposTecnicos { get; set; } = new List<TiposTecnicos>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaTiposTecnicos = await tiposTecnicosServices.Listar(t => t.TiposTecnicosId > 0);
+    }
+
+}
