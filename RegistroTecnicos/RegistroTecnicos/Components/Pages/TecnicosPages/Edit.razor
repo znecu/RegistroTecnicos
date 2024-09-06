@@ -1,11 +1,13 @@
 ﻿@page "/Tecnico/Edit/{TecnicoId:int}"
 @inject TecnicoServices tecnicoServices
+@inject TiposTecnicosServices tiposTecnicosServices
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
 <PageTitle>Editar</PageTitle>
 <EditForm Model="Tecnico" OnValidSubmit="Editar">
-    >
+    <DataAnnotationsValidator />
+
     <div class="container">
         <div class="shadow-lg">
 
@@ -29,19 +31,32 @@
                 <div class="col-2 mt-2">
                     <label class="form-label"><strong>Nombre</strong></label>
                     <InputText class="form-control" @bind-Value="Tecnico.Nombres"></InputText>
-                    @* <ValidationMessage For="(()=> Tecnicos.Nombres)"/> *@
+                    <ValidationMessage For="(()=> Tecnico.Nombres)" />
+                </div>
+
+                @*TipoTecnico*@
+                <div class="col-3 mt-2">
+                    <label class="form-label"><strong>Tipo de t&eacute;cnico</strong></label>
+                    <InputSelect class="form-select" @bind-Value="Tecnico.TiposTecnicosId">
+                        <option value="0" selected disabled>Seleccione un tipo de t&eacute;cnico</option>
+                        @foreach (var tipo in ListaTipoTecnico)
+                        {
+                            <option value="@tipo.TiposTecnicosId">@tipo.Descripcion</option>
+                        }
+                    </InputSelect>
                 </div>
 
                 @*SueldoHora*@
                 <div class="col-2 mt-2">
                     <label class="form-label"><strong>Sueldo por Hora</strong></label>
-                    <InputNumber class="form-control" @bind-Value="Tecnico.SueldoHora" step=" 0.1" min="0"></InputNumber>
+                    <InputNumber class="form-control" @bind-Value="Tecnico.SueldoHora"></InputNumber>
+                    <ValidationMessage For="(()=> Tecnico.SueldoHora)" />
                 </div>
             </div>
             @*Footer*@
             <div class="card-footer text-end mt-3">
                 <button type="button" class="btn btn-primary" @onclick="Volver">Volver</button>
-                <button type="button" class="btn btn-warning" @onclick="Editar">Editar</button>
+                <button type="submit" class="btn btn-warning">Editar</button>
             </div>
         </div>
     </div>
@@ -49,12 +64,14 @@
 @code {
     [Parameter]
     public int TecnicoId { get; set; }
+    public List<TiposTecnicos> ListaTipoTecnico { get; set; } = new List<TiposTecnicos>();
     public Tecnicos Tecnico { get; set; } = new Tecnicos();
     public string Mensaje { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
         Tecnico = await tecnicoServices.Buscar(TecnicoId);
+        ListaTipoTecnico = await tiposTecnicosServices.Listar(t => t.TiposTecnicosId > 0);
     }
 
     public async Task Editar()
