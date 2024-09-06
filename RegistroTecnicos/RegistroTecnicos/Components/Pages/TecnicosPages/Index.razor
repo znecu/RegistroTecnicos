@@ -1,6 +1,7 @@
 ﻿@page "/Tecnicos/Index"
 @using System.Globalization
 @inject TecnicoServices tecnicoServices
+@inject TiposTecnicosServices tiposTecnicosServices
 @rendermode InteractiveServer
 
 <PageTitle> </PageTitle>
@@ -48,7 +49,7 @@
                 </div>
                 @*Restablecer*@
                 <div class="col-3">
-                    <button type="button" class="btn btn-outline-secondary bi bi-arrow-clockwise" @onclick= "Restablecer" ></button>
+                    <button type="button" class="btn btn-outline-secondary bi bi-arrow-clockwise" @onclick="Restablecer"></button>
                 </div>
 
                 @*Crear*@
@@ -65,6 +66,7 @@
                     <tr>
                         <th>TecnicoId</th>
                         <th>Nombre</th>
+                        <th>Tipo de t&eacute;cnico</th>
                         <th>Sueldo por Hora</th>
                         <th>Ver</th>
                         <th>Editar</th>
@@ -78,6 +80,7 @@
                         <tr>
                             <td>@tecnico.TecnicoId</td>
                             <td>@tecnico.Nombres</td>
+                            <td>@tecnico.TiposTecnicos.Descripcion</td>
                             <td>@tecnico.SueldoHora.ToString("C", CultureInfo.CreateSpecificCulture("en-US"))</td>
 
 
@@ -110,12 +113,14 @@
 
 @code {
     public List<Tecnicos> ListaTecnico { get; set; } = new List<Tecnicos>();
+    public List<TiposTecnicos> ListaTipoTecnico { get; set; } = new List<TiposTecnicos>();
     public string Filtro { get; set; } = string.Empty;
     public string ValorFiltro { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
         ListaTecnico = await tecnicoServices.Listar(t => t.TecnicoId > 0);
+        ListaTipoTecnico = await tiposTecnicosServices.Listar(t => t.TiposTecnicosId > 0);
     }
 
     private async Task Buscar()
