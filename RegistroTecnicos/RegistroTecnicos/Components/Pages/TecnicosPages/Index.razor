@@ -37,6 +37,7 @@
                         <option value="" selected disabled>Elija una opci&oacute;n </option>
                         <option value="Id">Id</option>
                         <option value="Nombre">Nombre</option>
+                        <option value="TipoTecnico">Tipo de t&eacute;cnico</option>
                     </InputSelect>
                 </div>
 
@@ -128,10 +129,21 @@
         if (ValorFiltro.Trim() != "")
         {
             if (Filtro == "Id" && int.TryParse(ValorFiltro, out int tecnicoId))
+            {
                 ListaTecnico = await tecnicoServices.Listar(t => t.TecnicoId == tecnicoId);
 
+            }
+
             else if (Filtro == "Nombre")
+            {
                 ListaTecnico = await tecnicoServices.Listar(t => t.Nombres.ToLower().Contains(ValorFiltro.ToLower()));
+            }
+
+            else if (Filtro == "TipoTecnico")
+            {
+                ListaTecnico = await tecnicoServices.Listar(t => t.TiposTecnicos.Descripcion.ToLower().Contains(ValorFiltro.ToLower()));
+
+            }
         }
         else
         {
