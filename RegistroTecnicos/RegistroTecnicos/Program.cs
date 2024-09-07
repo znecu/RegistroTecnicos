@@ -11,11 +11,13 @@ builder.Services.AddRazorComponents()
 
 
 
-//
+
 var ConStr = builder.Configuration.GetConnectionString("ConStr");
 builder.Services.AddDbContext<Contexto>(Options => Options.UseSqlite(ConStr));
+
 builder.Services.AddScoped<TecnicoServices>();
-//
+builder.Services.AddScoped<TiposTecnicosServices>();
+
 
 
 
