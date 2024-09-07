@@ -17,7 +17,7 @@
             <ul class="mt-4">
                 <li><strong>Id: </strong>@Tecnico.TecnicoId</li>
                 <li><strong>Nombre: </strong>@Tecnico.Nombres</li>
-                <li><strong>Tipo de t&eacute;cnico> </strong>@Tecnico.TiposTecnicos.Descripcion</li>
+                <li><strong>Tipo de t&eacute;cnico: </strong>@Tecnico.TiposTecnicos.Descripcion</li>
                 <li><strong>Sueldo por Hora: </strong>@Tecnico.SueldoHora</li>
             </ul>
         </div>
@@ -33,14 +33,14 @@
 @code {
     [Parameter]
     public int TecnicoId { get; set; }
-    public List<TiposTecnicos> ListaTipoTecnico = new List<TiposTecnicos>();
+    public TiposTecnicos TipoTecnico { get; set; } = new TiposTecnicos();
     public Tecnicos Tecnico { get; set; } = new Tecnicos();
     public string Mensaje { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
         Tecnico = await tecnicoServices.Buscar(TecnicoId);
-        ListaTipoTecnico = await tiposTecnicosServices.Listar(t => t.TiposTecnicosId > 0);
+        TipoTecnico = await tiposTecnicosServices.Buscar(TecnicoId);
     }
 
     public void Volver()
