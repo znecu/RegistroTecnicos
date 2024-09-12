@@ -5,11 +5,25 @@
 namespace RegistroTecnicos.Migrations
 {
     /// <inheritdoc />
-    public partial class Inicial : Migration
+    public partial class Secondary : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Clientes",
+                columns: table => new
+                {
+                    ClientesId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Nombres = table.Column<string>(type: "TEXT", nullable: false),
+                    Whatsapp = table.Column<string>(type: "TEXT", maxLength: 10, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Clientes", x => x.ClientesId);
+                });
+
             migrationBuilder.CreateTable(
                 name: "TiposTecnicos",
                 columns: table => new
@@ -53,6 +67,9 @@ namespace RegistroTecnicos.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Clientes");
+
             migrationBuilder.DropTable(
                 name: "Tecnicos");
 
