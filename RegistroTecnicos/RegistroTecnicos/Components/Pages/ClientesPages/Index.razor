@@ -1,0 +1,152 @@
+﻿@page "/Cliente/Index"
+@inject ClientesServices clientesServices
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle></PageTitle>
+<div class="container">
+    <div class="shadow-lg">
+
+        @*Header*@
+        <div class="card-header text-center">
+            <h1><strong>Registro de Cliente</strong></h1>
+        </div>
+
+        @*Body*@
+        <div class="card-body">
+            <div class="row">
+
+                @*Filtrar*@
+                <div class="col-3">
+                    <label class="form-label"><strong>Filtrar</strong></label>
+                </div>
+
+                @*ValorFiltro*@
+                <div class="col-3">
+                    <label class="form-label"><strong>Buscar</strong></label>
+
+                </div>
+            </div>
+            @*Botones e inputs*@
+            <div class="row">
+
+                @*Filtro*@
+                <div class="col-3">
+                    <InputSelect class="form-select" @bind-Value="Filtro">
+                        <option value="" selected disabled>Elija una opci&oacute;n</option>
+                        <option value="Id"> Id</option>
+                        <option value="Nombre">Nombre</option>
+                        <option value="Numero">Whatsapp</option>
+                    </InputSelect>
+                </div>
+
+                @*Buscar*@
+                <div class="col-3">
+                    <div class="input-group">
+                        <input class="form-control" @bind-value="ValorFiltro" placeholder="Buscar" />
+                        <button type="button" class="btn btn-outline-primary bi bi-search" @onclick=Buscar></button>
+                    </div>
+                </div>
+
+                @*Restablecer*@
+                <div class="col-3">
+                    <button type="button" class="btn btn-outline-secondary bi bi-arrow-clockwise" @onclick="Restablecer"></button>
+                </div>
+
+                @*Crear*@
+                <div class="col text-end">
+                    <a href="/Cliente/Create">
+                        <button type="button" class="btn btn-success bi bi-person-plus-fill">Crear </button>
+                    </a>
+                </div>
+            </div>
+
+            @*Tabla*@
+            <table class="table table-bordered text-center mt-5">
+                <thead>
+                    <tr>
+                        <th>ClienteId</th>
+                        <th>Nombre</th>
+                        <th>N&uacute;mero de tel&eacute;fono</th>
+                        <th>Ver</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var cliente in ListaCliente)
+                    {
+                        <tr>
+                            <td>@cliente.ClientesId</td>
+                            <td>@cliente.Nombres</td>
+                            <td>@cliente.Whatsapp.Insert(3, "-").Insert(7, "-")</td>
+
+                            @*Ver*@
+                            <td>
+                                <a href="Cliente/Details/@cliente.ClientesId"><button type="button" class="btn btn-outline-info bi bi-eye"></button></a>
+                            </td>
+
+                            @*Editar*@
+                            <td>
+                                <a href="Cliente/Edit/@cliente.ClientesId"><button type="button" class="btn btn-outline-warning bi bi-pencil"></button></a>
+                            </td>
+
+                            @*Eliminar*@
+                            <td>
+                                <a href="Cliente/Delete/@cliente.ClientesId"><button type="button" class="btn btn-outline-danger bi bi-trash3"></button></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @*Footer*@
+        <div class="card-footer">
+            <p><strong>Cantidad de clientes: </strong>@ListaCliente.Count</p>
+        </div>
+    </div>
+</div>
+
+@code {
+    public List<Clientes> ListaCliente { get; set; } = new List<Clientes>();
+    public string Filtro { get; set; } = string.Empty;
+    public string ValorFiltro { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaCliente = await clientesServices.Listar(c => c.ClientesId > 0);
+    }
+
+    private async Task Buscar()
+    {
+        if (ValorFiltro.Trim() != "")
+        {
+            if (Filtro == "Id" && int.TryParse(ValorFiltro, out int clienteId))
+            {
+                ListaCliente = await clientesServices.Listar(c => c.ClientesId == clienteId);
+            }
+
+            else if (Filtro == "Nombre")
+            {
+                ListaCliente = await clientesServices.Listar(c => c.Nombres.ToLower().Contains(ValorFiltro.ToLower()));
+            }
+
+            else if (Filtro == "Numero")
+            {
+                ListaCliente = await clientesServices.Listar(c => c.Whatsapp.Equals(ValorFiltro));
+            }
+        }
+        else
+        {
+            ListaCliente = await clientesServices.Listar(c => true);
+        }
+    }
+
+    private async Task Restablecer()
+    {
+        ListaCliente = await clientesServices.Listar(c => c.ClientesId > 0);
+        Filtro = string.Empty;
+        ValorFiltro = string.Empty;
+    }
+}
