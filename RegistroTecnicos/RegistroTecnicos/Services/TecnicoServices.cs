@@ -60,11 +60,16 @@ public class TecnicoServices
     public async Task<Tecnicos?> Buscar(int id)
     {
         return await _contexto.Tecnicos
+            .AsNoTracking()
+            .FirstOrDefaultAsync(T => T.TecnicoId == id);
+    }
+    public async Task<Tecnicos?> BuscarTipoTecnico(int id)
+    {
+        return await _contexto.Tecnicos
             .Include(t => t.TiposTecnicos)
             .AsNoTracking()
             .FirstOrDefaultAsync(T => T.TecnicoId == id);
     }
-
     public async Task<List<Tecnicos>> Listar(Expression<Func<Tecnicos, bool>> criterio)
     {
         return await _contexto.Tecnicos
