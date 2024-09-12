@@ -33,14 +33,12 @@
 @code {
     [Parameter]
     public int TecnicoId { get; set; }
-    public TiposTecnicos TipoTecnico { get; set; } = new TiposTecnicos();
     public Tecnicos Tecnico { get; set; } = new Tecnicos();
     public string Mensaje { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
-        Tecnico = await tecnicoServices.Buscar(TecnicoId);
-        TipoTecnico = await tiposTecnicosServices.Buscar(TecnicoId);
+        Tecnico = await tecnicoServices.BuscarTipoTecnico(TecnicoId);
     }
 
     public void Volver()
