@@ -31,7 +31,7 @@
                     <ValidationMessage For="(()=> Cliente.Nombres)"/>
                 </div>
 
-                @*Numero*@
+                @*Whatsapp*@
                 <div class="col-2 mt-2">
                     <label class="form-label"><strong>Whatsapp</strong></label>
                     <InputText class="form-control" @bind-Value="Cliente.Whatsapp"></InputText>
@@ -45,7 +45,7 @@
                 <button type="submit" class="btn btn-success">Guardar</button>
             </div>
         </div>
-
+        @Mensaje
     </div>
 </EditForm>
 
