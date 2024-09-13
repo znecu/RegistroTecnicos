@@ -8,6 +8,11 @@
     <div class="shadow-lg">
 
         @*Header*@
+        <div class="card-header text-center">
+            <h3><strong>Detalle del cliente</strong></h3>
+        </div>
+
+        @*Body*@
         <div class="card-body">
             <ul class="mt-4">
                 <li><strong>Id: </strong>@Cliente.ClientesId</li>
@@ -23,6 +28,7 @@
     </div>
 
 </div>
+    @Mensaje
 
 @code {
     [Parameter]
