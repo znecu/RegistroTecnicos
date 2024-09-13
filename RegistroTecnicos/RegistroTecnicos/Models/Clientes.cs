@@ -13,7 +13,7 @@ public class Clientes
     public string? Nombres { get; set; }
 
     [Required(ErrorMessage = "Este campo es obligatorio. ")]
-    [StringLength(10, ErrorMessage = "Ingrese un número de telefono válido. ")]
+    [StringLength(10, MinimumLength =10, ErrorMessage = "Ingrese un número de telefono válido. ")]
     [RegularExpression(@"^\d+$", ErrorMessage = "Solo se permiten números.")]
     public string? Whatsapp {  get; set; }
 }
