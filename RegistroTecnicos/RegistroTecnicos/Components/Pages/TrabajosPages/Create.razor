@@ -1,0 +1,121 @@
+﻿@page "/Trabajo/Create"
+@inject TrabajosServices trabajosServices
+@inject TecnicoServices tecnicoServices
+@inject ClientesServices clienteServices
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Crear</PageTitle>
+<EditForm Model="Trabajo" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+
+    <div class="container">
+        <div class="shadow-lg">
+
+            @*Header*@
+            <div class="card-header text-center">
+                <h3><strong>Crear trabajo</strong></h3>
+            </div>
+
+            @*Body*@
+            <div class="card-body">
+
+                @*TrabajoId*@
+                <div class="col-1">
+                    <label class="form-label"><strong>TrabajoId</strong></label>
+                    <InputNumber class="form-control" readonly @bind-Value="Trabajo.TrabajoId"></InputNumber>
+                </div>
+
+                @*Fecha*@
+                <div class="col-2 mt-2">
+                    <label class="form-label"><strong>Fecha</strong></label>
+                    <InputDate class="form-control" @bind-Value="Trabajo.Fecha"></InputDate>
+
+                </div>
+
+                @*ClienteId*@
+                <div class="col-3 mt-2">
+                    <label class="form-label"><strong>ClienteId</strong></label>
+                    <InputSelect class="form-select" @bind-Value="Trabajo.ClienteId">
+                        <option value="0" selected disabled>Seleccione un ClienteId</option>
+                        @foreach (var cliente in ListaCliente)
+                        {
+                            <option value="@cliente.ClientesId">@cliente.Nombres</option>
+                        }
+
+                    </InputSelect>
+                </div>
+
+                @*TecnicoId*@
+                <div class="col-3 mt-2">
+                    <label class="form-label"><strong>TecnicoId</strong></label>
+                    <InputSelect class="form-select" @bind-Value="Trabajo.TecnicoId">
+                        <option value="0" selected disabled>Seleccione un TecnicoId</option>
+                        @foreach (var tecnico in ListaTecnico)
+                        {
+                            <option value="@tecnico.TecnicoId">@tecnico.TecnicoId</option>
+                        }
+
+                    </InputSelect>
+                </div>
+
+                @*Descripcion*@
+                <div class="col-4 mt-4">
+                    <label class="form-label"><strong>Descripci&oacute;n</strong></label>
+                    <InputText class="form-control" @bind-Value="Trabajo.Descripcion"></InputText>
+                    <ValidationMessage For="(()=> Trabajo.Descripcion)" />
+                </div>
+
+                @*Monto*@
+                <div class="col-2 mt-2">
+                    <label class="form-label"><strong>Monto</strong></label>
+                    <InputNumber class="form-control" @bind-Value="Trabajo.Monto"></InputNumber>
+                    <ValidationMessage For="(()=> Trabajo.Monto)" />
+                </div>
+            </div>
+
+            @*Footer*@
+            <div class="card-footer text-center">
+                <button type="button" class=" btn btn-primary" @onclick="() => Volver()">Volver</button>
+                <button type="submit" class=" btn btn-success">Guardar</button>
+            </div>
+        </div>
+    </div>
+    @Mensaje
+</EditForm>
+
+@code {
+    public Trabajos Trabajo { get; set; } = new Trabajos();
+    public List<Trabajos> ListaTrabajo { get; set; } = new List<Trabajos>();
+    public List<Clientes> ListaCliente { get; set; } = new List<Clientes>();
+    public List<Tecnicos> ListaTecnico { get; set; } = new List<Tecnicos>();
+    public string Mensaje { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaTrabajo = await trabajosServices.Listar(t => t.TrabajoId > 0);
+        ListaCliente = await clienteServices.Listar(c => c.ClientesId > 0);
+        ListaTecnico = await tecnicoServices.Listar(t => t.TecnicoId > 0);
+    }
+
+    public async Task Guardar()
+    {
+        var crear = await trabajosServices.Guardar(Trabajo);
+
+        if (crear)
+        {
+            Mensaje = "Creado exitosamente.";
+            Volver();
+        }
+
+        else
+        {
+            Mensaje = "No se ha podido crear el trabajo. ";
+        }
+    }
+
+    public void Volver()
+    {
+        navigationManager.NavigateTo("/Trabajo/Index");
+    }
+}

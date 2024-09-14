@@ -1,0 +1,55 @@
+﻿@page "/Trabajo/Details/{TrabajoId:int}"
+@inject TrabajosServices trabajosServices
+@inject ClientesServices clientesServices
+@inject TecnicoServices tecnicoServices
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Detalle</PageTitle>
+
+<div class="container">
+    <div class="shadow-lg">
+
+        @*Header*@
+        <div class="card-header text-center">
+            <h3><strong>Detalle del trabajo</strong></h3>
+        </div>
+
+        @*Body*@
+        <div class="card-body">
+            <ul class="mt-4">
+                <li><strong>TrabajoId: </strong>@Trabajo.TrabajoId</li>
+                <li><strong>ClienteId: </strong>@Trabajo.ClienteId</li>
+                <li><strong>NombreCliente: </strong>@Trabajo.Clientes?.Nombres</li>
+                <li><strong>TecnicoId: </strong>@Trabajo.TecnicoId</li>
+                <li><strong>NombreTecnico: </strong>@Trabajo.Tecnicos?.TecnicoId</li>
+                <li><strong>Descripci&oacute;n: </strong>@Trabajo.Descripcion</li>
+                <li><strong>Monto: </strong>@Trabajo.Monto</li>
+            </ul>
+        </div>
+        @*Footer*@
+        <div class="card-footer text-end mt-3">
+            <button type="button" class=" btn btn-primary" @onclick="Volver">Volver</button>
+            <a href=@($"https://wa.me/{Trabajo.Clientes?.Whatsapp}?text=Saludos,%20su%20trabajo%20está%20listo.") class="btn btn-success">
+                <span class="bi bi-whatsapp"></span> Enviar mensaje
+            </a>
+        </div>
+    </div>
+</div>
+@Mensaje
+@code {
+    [Parameter]
+    public int TrabajoId { get; set; }
+    public Trabajos Trabajo { get; set; } = new Trabajos();
+    public string Mensaje { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Trabajo = await trabajosServices.Buscar(TrabajoId);
+    }
+
+    public void Volver()
+    {
+        navigationManager.NavigateTo("/Trabajo/Index");
+    }
+}
