@@ -11,7 +11,7 @@
 
         @*Header*@
         <div class="card-header text-center">
-            <h1><strong>Registro de trabajos</strong></h1>
+            <h1><strong>Registro de Trabajos</strong></h1>
         </div>
 
         @*Body*@
@@ -40,7 +40,7 @@
                         <option value="NombreCliente">NombreCliente</option>
                         <option value="TecnicoId">TecnicoId</option>
                         <option value="NombreTecnico">NombreTecnico</option>
-                        <option value="Descripcion">Descripcion</option>
+                        <option value="Descripcion">Descripci&oacute;n</option>
                     </InputSelect>
                 </div>
 
@@ -74,7 +74,10 @@
                         <th>NombreCliente</th>
                         <th>TecnicoId</th>
                         <th>NombreTecnico</th>
-                        <th>Descripcion</th>
+                        <th>Descripci&oacute;n</th>
+                        <th>Ver</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -127,8 +130,7 @@
     protected override async Task OnInitializedAsync()
     {
         ListaTrabajo = await trabajosServices.Listar(t => t.TrabajoId > 0);
-        ListaClientes = await clientesServices.Listar(c => c.ClientesId > 0);
-        ListaTecnicos = await tecnicosServices.Listar(t => t.TecnicoId > 0);
+
     }
 
     private async Task Buscar()
