@@ -60,6 +60,8 @@ public class TrabajosServices
     public async Task<Trabajos?> Buscar(int id)
     {
         return await _contexto.Trabajos
+            .Include(t => t.Tecnicos)
+            .Include(c => c.Clientes)
             .AsNoTracking()
             .FirstOrDefaultAsync(t => t.TrabajoId == id);
     }
