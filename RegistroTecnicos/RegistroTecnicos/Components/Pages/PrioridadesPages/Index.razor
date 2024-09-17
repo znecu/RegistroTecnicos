@@ -1,0 +1,77 @@
+﻿@page "/Prioridad/Index"
+@inject PrioridadesServices prioridadesServices
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+<PageTitle>Index</PageTitle>
+<div class="container">
+    <div class="shadow-lg">
+
+        @*Header*@
+        <div class="card-header text-center">
+            <h1><strong>Registro de Prioridades</strong></h1>
+        </div>
+
+        @*Body*@
+        <div class="card-body">
+            <div class="row">
+
+                @*Crear*@
+                <div class="col text-end">
+                    <a href="/Prioridad/Create">
+                        <button type="button" class="btn btn-success bi bi-person-plus-fill">Crear </button>
+                    </a>
+                </div>
+
+                @*Tabla*@
+                <table class="table table-bordered text-center mt-5">
+                    <thead>
+                        <tr>
+                            <th>PrioridadId</th>
+                            <th>Descripci&oacute;n</th>
+                            <th>Tiempo</th>
+                            <th>Ver</th>
+                            <th>Editar</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var prioridades in ListaPrioridad)
+                        {
+                            <tr>
+                                <td>@prioridades.PrioridadId</td>
+                                <td>@prioridades.Descripcion</td>
+                                <td>@prioridades.Tiempo minutos</td>
+
+                                @*Ver*@
+                                <td>
+                                    <a href="Prioridad/Details/@prioridades.PrioridadId"><button type="button" class="btn btn-outline-info bi bi-eye"> </button></a>
+                                </td>
+
+                                @*Editar*@
+                                <td>
+                                    <a href="Prioridad/Edit/@prioridades.PrioridadId"><button type="button" class="btn btn-outline-warning bi bi-pencil"> </button></a>
+                                </td>
+
+                                @*Eliminar*@
+                                <td>
+                                    <a href="Prioridad/Delete/@prioridades.PrioridadId"><button type="button" class="btn btn-outline-danger bi bi-trash"> </button></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-footer"></div>
+</div>
+@code {
+    public List<Prioridades> ListaPrioridad { get; set; } = new List<Prioridades>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaPrioridad = await prioridadesServices.Listar(p => p.PrioridadId > 0);
+    }
+}
