@@ -11,8 +11,8 @@ using RegistroTecnicos.DAL;
 namespace RegistroTecnicos.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20240917201955_Prioridades")]
-    partial class Prioridades
+    [Migration("20241003174202_Connection")]
+    partial class Connection
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -115,12 +115,17 @@ namespace RegistroTecnicos.Migrations
                     b.Property<decimal>("Monto")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("PrioridadId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("TecnicoId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("TrabajoId");
 
                     b.HasIndex("ClienteId");
+
+                    b.HasIndex("PrioridadId");
 
                     b.HasIndex("TecnicoId");
 
@@ -146,6 +151,12 @@ namespace RegistroTecnicos.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("RegistroTecnicos.Models.Prioridades", "Prioridades")
+                        .WithMany()
+                        .HasForeignKey("PrioridadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("RegistroTecnicos.Models.Tecnicos", "Tecnicos")
                         .WithMany()
                         .HasForeignKey("TecnicoId")
@@ -153,6 +164,8 @@ namespace RegistroTecnicos.Migrations
                         .IsRequired();
 
                     b.Navigation("Clientes");
+
+                    b.Navigation("Prioridades");
 
                     b.Navigation("Tecnicos");
                 });
