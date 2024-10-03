@@ -2,6 +2,7 @@
 @inject TrabajosServices trabajosServices
 @inject TecnicoServices tecnicoServices
 @inject ClientesServices clienteServices
+@inject PrioridadesServices prioridadesServices
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
@@ -33,16 +34,27 @@
 
                 </div>
 
-                @*ClienteId*@
+                @*NombreCliente*@
                 <div class="col-3 mt-2">
-                    <label class="form-label"><strong>ClienteId</strong></label>
+                    <label class="form-label"><strong>NombreCliente</strong></label>
                     <InputSelect class="form-select" @bind-Value="Trabajo.ClienteId">
-                        <option value="0" selected disabled>Seleccione un ClienteId</option>
+                        <option value="0" selected disabled>Seleccione un Cliente</option>
                         @foreach (var cliente in ListaCliente)
                         {
                             <option value="@cliente.ClientesId">@cliente.Nombres</option>
                         }
 
+                    </InputSelect>
+                </div>
+                @*Prioridad*@
+                <div class="col-3 mt-2">
+                    <label class="form-label"><strong>Prioridad</strong></label>
+                    <InputSelect class="form-select" @bind-Value="Trabajo.PrioridadId">
+                        <option value="0" selected disabled>Seleccione una Prioridad</option>
+                        @foreach (var prioridad in ListaPrioridades)
+                        {
+                            <option value="@prioridad.PrioridadId">@prioridad.Descripcion</option>
+                        }
                     </InputSelect>
                 </div>
 
@@ -60,7 +72,7 @@
                 </div>
 
                 @*Descripcion*@
-                <div class="col-4 mt-4">
+                <div class="col-3 mt-2">
                     <label class="form-label"><strong>Descripci&oacute;n</strong></label>
                     <InputText class="form-control" @bind-Value="Trabajo.Descripcion"></InputText>
                     <ValidationMessage For="(()=> Trabajo.Descripcion)" />
@@ -89,6 +101,7 @@
     public List<Trabajos> ListaTrabajo { get; set; } = new List<Trabajos>();
     public List<Clientes> ListaCliente { get; set; } = new List<Clientes>();
     public List<Tecnicos> ListaTecnico { get; set; } = new List<Tecnicos>();
+    public List<Prioridades> ListaPrioridades { get; set; } = new List<Prioridades>();
     public string Mensaje { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
@@ -96,6 +109,7 @@
         ListaTrabajo = await trabajosServices.Listar(t => t.TrabajoId > 0);
         ListaCliente = await clienteServices.Listar(c => c.ClientesId > 0);
         ListaTecnico = await tecnicoServices.Listar(t => t.TecnicoId > 0);
+        ListaPrioridades = await prioridadesServices.Listar(p => p.PrioridadId > 0);
     }
 
     public async Task Guardar()
