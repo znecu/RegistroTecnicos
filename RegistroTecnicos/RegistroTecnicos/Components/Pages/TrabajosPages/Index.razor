@@ -3,6 +3,7 @@
 @inject NavigationManager navigationManager
 @inject ClientesServices clientesServices
 @inject TecnicoServices tecnicosServices
+@inject PrioridadesServices prioridadesServices
 @rendermode InteractiveServer
 
 <PageTitle>Index</PageTitle>
@@ -38,6 +39,7 @@
                         <option value="TrabajoId">TrabajoId</option>
                         <option value="ClienteId">ClienteId</option>
                         <option value="NombreCliente">NombreCliente</option>
+                        <option value="Descripcion">Prioridad</option>
                         <option value="TecnicoId">TecnicoId</option>
                         <option value="NombreTecnico">NombreTecnico</option>
                         <option value="Descripcion">Descripci&oacute;n</option>
@@ -72,6 +74,7 @@
                         <th>TrabajoId</th>
                         <th>ClienteId</th>
                         <th>NombreCliente</th>
+                        <th>Prioridad</th>
                         <th>TecnicoId</th>
                         <th>NombreTecnico</th>
                         <th>Descripci&oacute;n</th>
@@ -87,9 +90,10 @@
                         <tr>
                             <td>@trabajo.TrabajoId</td>
                             <td>@trabajo.ClienteId</td>
-                            <td>@trabajo.Clientes.Nombres</td>
+                            <td>@trabajo.Clientes?.Nombres</td>
+                            <td>@trabajo.Prioridades?.Descripcion</td>
                             <td>@trabajo.TecnicoId</td>
-                            <td>@trabajo.Tecnicos.Nombres</td>
+                            <td>@trabajo.Tecnicos?.Nombres</td>
                             <td>@trabajo.Descripcion</td>
 
                             @*Ver*@
@@ -125,6 +129,7 @@
     public List<Trabajos> ListaTrabajo { get; set; } = new List<Trabajos>();
     public List<Clientes> ListaClientes { get; set; } = new List<Clientes>();
     public List<Tecnicos> ListaTecnicos { get; set; } = new List<Tecnicos>();
+    public List<Prioridades> ListaPrioridades{ get; set; } = new List<Prioridades>();
     public string Filtro { get; set; } = string.Empty;
     public string ValorFiltro { get; set; } = string.Empty;
 
@@ -147,12 +152,15 @@
             {
                 ListaTrabajo = await trabajosServices.Listar(t => t.ClienteId == clienteId);
             }
-
             else if (Filtro == "NombreCliente")
             {
                 ListaTrabajo = await trabajosServices.Listar(t => t.Clientes.Nombres.ToLower().Contains(ValorFiltro.ToLower()));
             }
 
+            else if(Filtro == "Prioridad")
+            {
+                ListaTrabajo = await trabajosServices.Listar(t => t.Prioridades.Descripcion.ToLower().Contains(ValorFiltro.ToLower()));
+            }
             else if (Filtro == "TecnicoId" && int.TryParse(ValorFiltro, out int tecnicoId))
             {
                 ListaTrabajo = await trabajosServices.Listar(t => t.TecnicoId == tecnicoId);
