@@ -75,9 +75,9 @@
                         <th>ClienteId</th>
                         <th>NombreCliente</th>
                         <th>Prioridad</th>
-                        <th>TecnicoId</th>
                         <th>NombreTecnico</th>
                         <th>Descripci&oacute;n</th>
+                        <th>Monto</th>
                         <th>Ver</th>
                         <th>Editar</th>
                         <th>Eliminar</th>
@@ -92,9 +92,9 @@
                             <td>@trabajo.ClienteId</td>
                             <td>@trabajo.Clientes?.Nombres</td>
                             <td>@trabajo.Prioridades?.Descripcion</td>
-                            <td>@trabajo.TecnicoId</td>
                             <td>@trabajo.Tecnicos?.Nombres</td>
                             <td>@trabajo.Descripcion</td>
+                            <td>@trabajo.Monto.ToString("C", CultureInfo.CreateSpecificCulture("en-US"))</td>
 
                             @*Ver*@
                             <td>
