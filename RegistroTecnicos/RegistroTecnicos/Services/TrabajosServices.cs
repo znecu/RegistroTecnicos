@@ -73,6 +73,15 @@ public class TrabajosServices
             .Include(t => t.Clientes)
             .Include(t => t.Tecnicos)
             .Include(p => p.Prioridades)
+            .Include(d => d.TrabajoDetalle)
+            .AsNoTracking()
+            .Where(criterio)
+            .ToListAsync();
+    }
+
+    public async Task<List<Articulos>> ListarArticulos(Expression<Func<Articulos, bool>> criterio)
+    {
+        return await _contexto.Articulos
             .AsNoTracking()
             .Where(criterio)
             .ToListAsync();
