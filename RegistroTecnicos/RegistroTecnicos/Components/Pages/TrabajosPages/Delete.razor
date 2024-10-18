@@ -28,7 +28,7 @@
                 <li><strong>TecnicoId: </strong>@Trabajo.TecnicoId</li>
                 <li><strong>NombreTecnico: </strong>@Trabajo.Tecnicos?.Nombres</li>
                 <li><strong>Descripci&oacute;n: </strong>@Trabajo.Descripcion</li>
-                <li><strong>Monto: </strong>@Trabajo.Monto</li>
+                <li><strong>Monto: </strong>@Trabajo.Monto.ToString("C", CultureInfo.CreateSpecificCulture("en-US"))</li>
             </ul>
         </div>
 
@@ -44,6 +44,7 @@
     [Parameter]
     public int TrabajoId { get; set; }
     public Trabajos Trabajo { get; set; } = new Trabajos();
+    public TrabajoDetalle TrabajoDetalle { get; set; } = new TrabajoDetalle();
 
     public string Mensaje { get; set; } = string.Empty;
 
