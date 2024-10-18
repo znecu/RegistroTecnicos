@@ -79,11 +79,19 @@ public class TrabajosServices
             .ToListAsync();
     }
 
-    public async Task<List<Articulos>> ListarArticulos(Expression<Func<Articulos, bool>> criterio)
+    public async Task<List<Articulos>> ListarArticulos()
     {
         return await _contexto.Articulos
             .AsNoTracking()
-            .Where(criterio)
             .ToListAsync();
+    }
+
+    public async Task <List<TrabajoDetalle>> ListarDetalle(int trabajoId)
+    {
+        var detalle = await _contexto.TrabajoDetalles
+            .Where(d => d.TrabajoId == trabajoId)
+            .ToListAsync(); 
+
+        return detalle;
     }
 }
