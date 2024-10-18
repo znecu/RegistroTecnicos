@@ -24,7 +24,11 @@
                 <li><strong>Prioridad: </strong>@Trabajo.Prioridades.Descripcion</li>
                 <li><strong>TecnicoId: </strong>@Trabajo.TecnicoId</li>
                 <li><strong>NombreTecnico: </strong>@Trabajo.Tecnicos?.Nombres</li>
-                <li><strong>Descripci&oacute;n: </strong>@Trabajo.Descripcion</li>               
+                <li><strong>Descripci&oacute;n: </strong>@Trabajo.Descripcion</li>       
+                @foreach (var detalle in ListaDetalle)
+                {
+                    <li><strong>Articulo: </strong>@detalle.Articulos.Descripcion</li>
+                }                             
                 <li><strong>Monto: </strong>@Trabajo.Monto.ToString("C", CultureInfo.CreateSpecificCulture("en-US"))</li>
             </ul>
         </div>
@@ -44,10 +48,13 @@
     public Trabajos Trabajo { get; set; } = new Trabajos();
     public string Mensaje { get; set; } = string.Empty;
     public TrabajoDetalle TrabajoDetalle { get; set; } = new TrabajoDetalle();
+    public List<TrabajoDetalle> ListaDetalle { get; set; } = new List<TrabajoDetalle>();
+
 
     protected override async Task OnInitializedAsync()
     {
         Trabajo = await trabajosServices.Buscar(TrabajoId);
+        ListaDetalle = await trabajosServices.BuscarDetalle(TrabajoId);
     }
 
     public void Volver()
