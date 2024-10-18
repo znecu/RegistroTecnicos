@@ -202,7 +202,7 @@ namespace RegistroTecnicos.Migrations
 
                     b.HasIndex("TrabajoId");
 
-                    b.ToTable("trabajoDetalles");
+                    b.ToTable("TrabajoDetalles");
                 });
 
             modelBuilder.Entity("RegistroTecnicos.Models.Trabajos", b =>

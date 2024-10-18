@@ -128,7 +128,7 @@ namespace RegistroTecnicos.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "trabajoDetalles",
+                name: "TrabajoDetalles",
                 columns: table => new
                 {
                     DetalleId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -141,15 +141,15 @@ namespace RegistroTecnicos.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_trabajoDetalles", x => x.DetalleId);
+                    table.PrimaryKey("PK_TrabajoDetalles", x => x.DetalleId);
                     table.ForeignKey(
-                        name: "FK_trabajoDetalles_Articulos_ArticuloId",
+                        name: "FK_TrabajoDetalles_Articulos_ArticuloId",
                         column: x => x.ArticuloId,
                         principalTable: "Articulos",
                         principalColumn: "ArticuloId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_trabajoDetalles_Trabajos_TrabajoId",
+                        name: "FK_TrabajoDetalles_Trabajos_TrabajoId",
                         column: x => x.TrabajoId,
                         principalTable: "Trabajos",
                         principalColumn: "TrabajoId",
@@ -176,13 +176,13 @@ namespace RegistroTecnicos.Migrations
                 column: "TiposTecnicosId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_trabajoDetalles_ArticuloId",
-                table: "trabajoDetalles",
+                name: "IX_TrabajoDetalles_ArticuloId",
+                table: "TrabajoDetalles",
                 column: "ArticuloId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_trabajoDetalles_TrabajoId",
-                table: "trabajoDetalles",
+                name: "IX_TrabajoDetalles_TrabajoId",
+                table: "TrabajoDetalles",
                 column: "TrabajoId");
 
             migrationBuilder.CreateIndex(
@@ -205,7 +205,7 @@ namespace RegistroTecnicos.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "trabajoDetalles");
+                name: "TrabajoDetalles");
 
             migrationBuilder.DropTable(
                 name: "Articulos");

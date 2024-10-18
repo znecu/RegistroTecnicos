@@ -11,7 +11,7 @@ using RegistroTecnicos.DAL;
 namespace RegistroTecnicos.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20241016215155_Inicial")]
+    [Migration("20241017233342_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -205,7 +205,7 @@ namespace RegistroTecnicos.Migrations
 
                     b.HasIndex("TrabajoId");
 
-                    b.ToTable("trabajoDetalles");
+                    b.ToTable("TrabajoDetalles");
                 });
 
             modelBuilder.Entity("RegistroTecnicos.Models.Trabajos", b =>
