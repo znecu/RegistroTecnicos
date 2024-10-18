@@ -14,9 +14,9 @@ public class TrabajosServices
         _contexto = contexto;
     }
 
-    public async Task<bool>Guardar(Trabajos trabajo)
+    public async Task<bool> Guardar(Trabajos trabajo)
     {
-        if(!await Existe(trabajo.TrabajoId))
+        if (!await Existe(trabajo.TrabajoId))
             return await Insertar(trabajo);
         else
             return await Modificar(trabajo);
@@ -44,12 +44,12 @@ public class TrabajosServices
 
     public async Task<bool> ExisteTrabajo(int trabajoId, string descripcion)
     {
-        return await _contexto .Trabajos
+        return await _contexto.Trabajos
             .AnyAsync(t => t.TrabajoId != trabajoId &&
             (t.Descripcion.ToLower().Equals(descripcion.ToLower())));
     }
 
-    public async Task <bool> Eliminar(int id)
+    public async Task<bool> Eliminar(int id)
     {
         var trabajos = await _contexto.Trabajos
             .Where(t => t.TrabajoId == id)
@@ -66,7 +66,14 @@ public class TrabajosServices
             .AsNoTracking()
             .FirstOrDefaultAsync(t => t.TrabajoId == id);
     }
-
+    public async Task<List<TrabajoDetalle>> BuscarDetalle(int id)
+    {
+        return await _contexto.TrabajoDetalles
+            .Include(td => td.Articulos)
+            .AsNoTracking()
+            .Where(td => td.TrabajoId == id)
+            .ToListAsync();
+    }
     public async Task<List<Trabajos>> Listar(Expression<Func<Trabajos, bool>> criterio)
     {
         return await _contexto.Trabajos
@@ -86,11 +93,11 @@ public class TrabajosServices
             .ToListAsync();
     }
 
-    public async Task <List<TrabajoDetalle>> ListarDetalle(int trabajoId)
+    public async Task<List<TrabajoDetalle>> ListarDetalle(int trabajoId)
     {
         var detalle = await _contexto.TrabajoDetalles
             .Where(d => d.TrabajoId == trabajoId)
-            .ToListAsync(); 
+            .ToListAsync();
 
         return detalle;
     }
