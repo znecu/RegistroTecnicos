@@ -24,8 +24,8 @@
                 <li><strong>Prioridad: </strong>@Trabajo.Prioridades.Descripcion</li>
                 <li><strong>TecnicoId: </strong>@Trabajo.TecnicoId</li>
                 <li><strong>NombreTecnico: </strong>@Trabajo.Tecnicos?.Nombres</li>
-                <li><strong>Descripci&oacute;n: </strong>@Trabajo.Descripcion</li>
-                <li><strong>Monto: </strong>@Trabajo.Monto</li>
+                <li><strong>Descripci&oacute;n: </strong>@Trabajo.Descripcion</li>               
+                <li><strong>Monto: </strong>@Trabajo.Monto.ToString("C", CultureInfo.CreateSpecificCulture("en-US"))</li>
             </ul>
         </div>
         @*Footer*@
@@ -43,6 +43,7 @@
     public int TrabajoId { get; set; }
     public Trabajos Trabajo { get; set; } = new Trabajos();
     public string Mensaje { get; set; } = string.Empty;
+    public TrabajoDetalle TrabajoDetalle { get; set; } = new TrabajoDetalle();
 
     protected override async Task OnInitializedAsync()
     {
