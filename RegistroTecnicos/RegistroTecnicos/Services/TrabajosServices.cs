@@ -118,7 +118,7 @@ public class TrabajosServices
     {
         return await _contexto.Articulos
             .AsNoTracking()
-            .FirstOrDefaultAsync(a => a.ArticuloId == id)   
+            .FirstOrDefaultAsync(a => a.ArticuloId == id);   
     }
 
     public async Task<bool> ActualizarArticulo(Articulos articulo)
