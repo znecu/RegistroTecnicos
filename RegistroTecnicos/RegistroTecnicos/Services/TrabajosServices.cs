@@ -17,7 +17,19 @@ public class TrabajosServices
     public async Task<bool> Guardar(Trabajos trabajo)
     {
         if (!await Existe(trabajo.TrabajoId))
+        {
+            foreach (var detalle in trabajo.TrabajoDetalle)
+            {
+                var articulo = await BuscarArticulos(detalle.ArticuloId);
+                if (articulo != null)
+                {
+                    articulo.Existencia -= detalle.Cantidad;
+                    await ActualizarArticulo(articulo);
+                }
+            }
             return await Insertar(trabajo);
+
+        }
         else
             return await Modificar(trabajo);
     }
@@ -100,5 +112,19 @@ public class TrabajosServices
             .ToListAsync();
 
         return detalle;
+    }
+
+    public async Task<Articulos> BuscarArticulos(int id)
+    {
+        return await _contexto.Articulos
+            .AsNoTracking()
+            .FirstOrDefaultAsync(a => a.ArticuloId == id)   
+    }
+
+    public async Task<bool> ActualizarArticulo(Articulos articulo)
+    {
+        _contexto.Articulos.Update(articulo);
+        return await _contexto
+            .SaveChangesAsync() > 0;
     }
 }
