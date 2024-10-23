@@ -13,13 +13,15 @@ builder.Services.AddRazorComponents()
 
 
 var ConStr = builder.Configuration.GetConnectionString("ConStr");
-builder.Services.AddDbContext<Contexto>(Options => Options.UseSqlite(ConStr));
+builder.Services.AddDbContextFactory<Contexto>(Options => Options.UseSqlServer(ConStr));
 
 builder.Services.AddScoped<TecnicoServices>();
 builder.Services.AddScoped<TiposTecnicosServices>();
 builder.Services.AddScoped<ClientesServices>();
 builder.Services.AddScoped<TrabajosServices>();
 builder.Services.AddScoped<PrioridadesServices>();
+
+builder.Services.AddBlazorBootstrap();
 
 
 
