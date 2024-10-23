@@ -15,5 +15,5 @@ public class Prioridades
 
     [Required]
     [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "Este campo solo permite números.")]
-    public decimal Tiempo { get; set; }
+    public double Tiempo { get; set; }
 }

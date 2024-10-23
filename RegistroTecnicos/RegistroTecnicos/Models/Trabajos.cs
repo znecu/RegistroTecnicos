@@ -15,7 +15,7 @@ public class Trabajos
     [Required(ErrorMessage ="Este campo es obligatorio. ")]
     [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "Este campo solo permite números.")]
     [Range(minimum: 0.1, maximum: 500000, ErrorMessage = "Por favor, ingrese una cantidad mayor a 0 y menor o igual a $500,000. ")]
-    public decimal Monto { get; set; }
+    public double Monto { get; set; }
 
 
     public DateTime Fecha { get; set; }
@@ -36,5 +36,5 @@ public class Trabajos
 
     public Prioridades? Prioridades { get; set;}
 
-    public ICollection<TrabajoDetalle> TrabajoDetalle { get; set; }
+    public ICollection<TrabajoDetalle> TrabajoDetalle { get; set; } = new List<TrabajoDetalle>();
 }
