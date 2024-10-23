@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RegistroTecnicos.DAL;
@@ -11,33 +12,39 @@ using RegistroTecnicos.DAL;
 namespace RegistroTecnicos.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20241017233342_Inicial")]
+    [Migration("20241023214309_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
+            modelBuilder
+                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("RegistroTecnicos.Models.Articulos", b =>
                 {
                     b.Property<int>("ArticuloId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
-                    b.Property<decimal>("Costo")
-                        .HasColumnType("TEXT");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ArticuloId"));
+
+                    b.Property<double>("Costo")
+                        .HasColumnType("float");
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Existencia")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
-                    b.Property<decimal>("Precio")
-                        .HasColumnType("TEXT");
+                    b.Property<double>("Precio")
+                        .HasColumnType("float");
 
                     b.HasKey("ArticuloId");
 
@@ -47,58 +54,58 @@ namespace RegistroTecnicos.Migrations
                         new
                         {
                             ArticuloId = 1,
-                            Costo = 900m,
+                            Costo = 900.0,
                             Descripcion = "Cable RJ45",
                             Existencia = 50,
-                            Precio = 1500m
+                            Precio = 1500.0
                         },
                         new
                         {
                             ArticuloId = 2,
-                            Costo = 3000m,
+                            Costo = 3000.0,
                             Descripcion = "Papel de impresora",
                             Existencia = 100,
-                            Precio = 100m
+                            Precio = 100.0
                         },
                         new
                         {
                             ArticuloId = 3,
-                            Costo = 3500m,
+                            Costo = 3500.0,
                             Descripcion = "Pin de carga",
                             Existencia = 45,
-                            Precio = 5000m
+                            Precio = 5000.0
                         },
                         new
                         {
                             ArticuloId = 4,
-                            Costo = 9000m,
+                            Costo = 9000.0,
                             Descripcion = "Cámara de vigilancia",
                             Existencia = 50,
-                            Precio = 11000m
+                            Precio = 11000.0
                         },
                         new
                         {
                             ArticuloId = 5,
-                            Costo = 2000m,
+                            Costo = 2000.0,
                             Descripcion = "Router",
                             Existencia = 150,
-                            Precio = 3000m
+                            Precio = 3000.0
                         },
                         new
                         {
                             ArticuloId = 6,
-                            Costo = 6500m,
+                            Costo = 6500.0,
                             Descripcion = "Pantalla de celular",
                             Existencia = 100,
-                            Precio = 9000m
+                            Precio = 9000.0
                         },
                         new
                         {
                             ArticuloId = 7,
-                            Costo = 4000m,
+                            Costo = 4000.0,
                             Descripcion = "Tintas de impresoras",
                             Existencia = 200,
-                            Precio = 6000m
+                            Precio = 6000.0
                         });
                 });
 
@@ -106,16 +113,18 @@ namespace RegistroTecnicos.Migrations
                 {
                     b.Property<int>("ClientesId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientesId"));
 
                     b.Property<string>("Nombres")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Whatsapp")
                         .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(10)");
 
                     b.HasKey("ClientesId");
 
@@ -126,14 +135,16 @@ namespace RegistroTecnicos.Migrations
                 {
                     b.Property<int>("PrioridadId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PrioridadId"));
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Tiempo")
-                        .HasColumnType("TEXT");
+                    b.Property<double>("Tiempo")
+                        .HasColumnType("float");
 
                     b.HasKey("PrioridadId");
 
@@ -144,17 +155,19 @@ namespace RegistroTecnicos.Migrations
                 {
                     b.Property<int>("TecnicoId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TecnicoId"));
 
                     b.Property<string>("Nombres")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("SueldoHora")
-                        .HasColumnType("TEXT");
+                    b.Property<double>("SueldoHora")
+                        .HasColumnType("float");
 
                     b.Property<int>("TiposTecnicosId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.HasKey("TecnicoId");
 
@@ -167,11 +180,13 @@ namespace RegistroTecnicos.Migrations
                 {
                     b.Property<int>("TiposTecnicosId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TiposTecnicosId"));
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("TiposTecnicosId");
 
@@ -182,22 +197,24 @@ namespace RegistroTecnicos.Migrations
                 {
                     b.Property<int>("DetalleId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DetalleId"));
 
                     b.Property<int>("ArticuloId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<int>("Cantidad")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
-                    b.Property<decimal>("Costo")
-                        .HasColumnType("TEXT");
+                    b.Property<double>("Costo")
+                        .HasColumnType("float");
 
-                    b.Property<decimal>("Precio")
-                        .HasColumnType("TEXT");
+                    b.Property<double>("Precio")
+                        .HasColumnType("float");
 
                     b.Property<int>("TrabajoId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.HasKey("DetalleId");
 
@@ -212,26 +229,28 @@ namespace RegistroTecnicos.Migrations
                 {
                     b.Property<int>("TrabajoId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TrabajoId"));
 
                     b.Property<int>("ClienteId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Fecha")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetime2");
 
-                    b.Property<decimal>("Monto")
-                        .HasColumnType("TEXT");
+                    b.Property<double>("Monto")
+                        .HasColumnType("float");
 
                     b.Property<int>("PrioridadId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<int>("TecnicoId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.HasKey("TrabajoId");
 
