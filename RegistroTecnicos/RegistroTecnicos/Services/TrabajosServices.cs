@@ -5,14 +5,8 @@ using System.Linq.Expressions;
 
 namespace RegistroTecnicos.Services;
 
-public class TrabajosServices
+public class TrabajosServices(IDbContextFactory<Contexto> DbFactory)
 {
-    private readonly Contexto _contexto;
-
-    public TrabajosServices(Contexto contexto)
-    {
-        _contexto = contexto;
-    }
 
     public async Task<bool> Guardar(Trabajos trabajo)
     {
@@ -36,6 +30,7 @@ public class TrabajosServices
 
     private async Task<bool> Modificar(Trabajos trabajo)
     {
+        await using var _contexto = await DbFactory.CreateDbContextAsync();
         _contexto.Update(trabajo);
         return await _contexto
             .SaveChangesAsync() > 0;
@@ -43,6 +38,7 @@ public class TrabajosServices
 
     private async Task<bool> Insertar(Trabajos trabajo)
     {
+        await using var _contexto = await DbFactory.CreateDbContextAsync();
         _contexto.Trabajos.Add(trabajo);
         return await _contexto
             .SaveChangesAsync() > 0;
@@ -50,12 +46,14 @@ public class TrabajosServices
 
     private async Task<bool> Existe(int trabajoId)
     {
+        await using var _contexto = await DbFactory.CreateDbContextAsync();
         return await _contexto.Trabajos
             .AnyAsync(t => t.TrabajoId == trabajoId);
     }
 
     public async Task<bool> ExisteTrabajo(int trabajoId, string descripcion)
     {
+        await using var _contexto = await DbFactory.CreateDbContextAsync();
         return await _contexto.Trabajos
             .AnyAsync(t => t.TrabajoId != trabajoId &&
             (t.Descripcion.ToLower().Equals(descripcion.ToLower())));
@@ -63,6 +61,7 @@ public class TrabajosServices
 
     public async Task<bool> Eliminar(int id)
     {
+        await using var _contexto = await DbFactory.CreateDbContextAsync();
         var trabajos = await _contexto.Trabajos
             .Where(t => t.TrabajoId == id)
             .ExecuteDeleteAsync();
@@ -71,6 +70,7 @@ public class TrabajosServices
 
     public async Task<Trabajos?> Buscar(int id)
     {
+        await using var _contexto = await DbFactory.CreateDbContextAsync();
         return await _contexto.Trabajos
             .Include(t => t.Tecnicos)
             .Include(c => c.Clientes)
@@ -80,6 +80,7 @@ public class TrabajosServices
     }
     public async Task<List<TrabajoDetalle>> BuscarDetalle(int id)
     {
+        await using var _contexto = await DbFactory.CreateDbContextAsync();
         return await _contexto.TrabajoDetalles
             .Include(td => td.Articulos)
             .AsNoTracking()
@@ -88,6 +89,7 @@ public class TrabajosServices
     }
     public async Task<List<Trabajos>> Listar(Expression<Func<Trabajos, bool>> criterio)
     {
+        await using var _contexto = await DbFactory.CreateDbContextAsync();
         return await _contexto.Trabajos
             .Include(t => t.Clientes)
             .Include(t => t.Tecnicos)
@@ -100,6 +102,7 @@ public class TrabajosServices
 
     public async Task<List<Articulos>> ListarArticulos()
     {
+        await using var _contexto = await DbFactory.CreateDbContextAsync();
         return await _contexto.Articulos
             .AsNoTracking()
             .ToListAsync();
@@ -107,6 +110,7 @@ public class TrabajosServices
 
     public async Task<List<TrabajoDetalle>> ListarDetalle(int trabajoId)
     {
+        await using var _contexto = await DbFactory.CreateDbContextAsync();
         var detalle = await _contexto.TrabajoDetalles
             .Where(d => d.TrabajoId == trabajoId)
             .ToListAsync();
@@ -116,6 +120,7 @@ public class TrabajosServices
 
     public async Task<Articulos> BuscarArticulos(int id)
     {
+        await using var _contexto = await DbFactory.CreateDbContextAsync();
         return await _contexto.Articulos
             .AsNoTracking()
             .FirstOrDefaultAsync(a => a.ArticuloId == id);   
@@ -123,6 +128,7 @@ public class TrabajosServices
 
     public async Task<bool> ActualizarArticulo(Articulos articulo)
     {
+        await using var _contexto = await DbFactory.CreateDbContextAsync();
         _contexto.Articulos.Update(articulo);
         return await _contexto
             .SaveChangesAsync() > 0;
