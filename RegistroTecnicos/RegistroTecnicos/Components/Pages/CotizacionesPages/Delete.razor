@@ -1,0 +1,78 @@
+﻿@page "/Cotizacion/Delete/{CotizacionId:int}"
+@inject CotizacionesServices cotizacionServices
+@inject ClientesServices clientesServices
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+<PageTitle>Eliminar</PageTitle>
+
+<div class="container">
+    <div class="shadow-lg">
+
+        @*Header*@
+        <div class="card-header text-center">
+            <h3><strong>Eliminar cotizaci&oacute;n</strong></h3>
+        </div>
+
+        @*Body*@
+        <div class="card-body">
+            <div class="text-center mt-3">
+                <h5><strong>¿Est&aacute; seguro de que desea eliminar esta cotizaci&oacute;n?</strong></h5>
+            </div>
+
+            <ul class="mt-4">
+                <li><strong>CotizacionId: </strong>@Cotizaciones.CotizacionId</li>
+                <li><strong>ClienteId: </strong>@Cotizaciones.ClienteId</li>
+                <li><strong>Fecha: </strong>@Cotizaciones.Fecha</li>
+                <li><strong>Observaci&oacute;n: </strong>@Cotizaciones.Observacion</li>
+                @foreach (var detalle in ListaDetalle)
+                {
+                    <li><strong>Articulo: </strong>@detalle.Articulos.Descripcion</li>
+                }
+                <li><strong>Monto: </strong>@Cotizaciones.Monto.ToString("C", CultureInfo.CreateSpecificCulture("en-US"))</li>
+            </ul>
+        </div>
+
+        @*Footer*@
+        <div class="card-footer text-end mt-3">
+            <button type="button" class="btn btn-primary" @onclick="Volver">Volver</button>
+            <button type="button" class="btn btn-danger" @onclick="Eliminar">Eliminar</button>
+        </div>
+    </div>
+</div>
+@Mensaje
+@code {
+    [Parameter]
+    public int CotizacionId { get; set; }
+    public Cotizaciones Cotizaciones { get; set; } = new Cotizaciones();
+    public CotizacionesDetalle CotizacionesDetalle { get; set; } = new CotizacionesDetalle();
+    public List<CotizacionesDetalle> ListaDetalle { get; set; } = new List<CotizacionesDetalle>();
+
+    public string Mensaje { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Cotizaciones = await cotizacionServices.Buscar(CotizacionId);
+        ListaDetalle = await cotizacionServices.BuscarDetalle(CotizacionId);
+    }
+
+    private async Task Eliminar()
+    {
+        var Eliminar = await cotizacionServices.Eliminar(Cotizaciones.CotizacionId);
+
+        if (Eliminar)
+        {
+            Mensaje = "La cotización se ha eliminado correctamente. ";
+            Volver();
+        }
+
+        else
+        {
+            Mensaje = "No se ha podido eliminar la cotización. ";
+        }
+    }
+
+    public void Volver()
+    {
+        navigationManager.NavigateTo("/Cotizacion/Index");
+    }
+}
