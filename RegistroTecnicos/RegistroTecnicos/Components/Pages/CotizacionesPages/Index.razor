@@ -17,6 +17,25 @@
         <div class="card-body">
             <div class="row">
 
+                @*FiltroFecha*@
+                <div class="row mt-3">
+
+                    @*Desde*@
+                    <div class="col-3">
+                        <label class="col-form-label"><strong>Desde</strong></label>
+                        <InputDate class="form-control" @bind-Value="Desde"></InputDate>
+                    </div>
+
+                    @*Hasta*@
+                    <div class="col-3">
+                        <label class="col-form-label"><strong>Hasta</strong></label>
+                        <div class="input-group">
+                            <InputDate class="form-control" @bind-Value="Hasta"></InputDate>
+                        </div>
+
+                    </div>
+                </div>
+
                 @*Filtrar*@
                 <div class="col-3">
                     <label class="form-label"><strong>Filtrar: </strong></label>
@@ -35,6 +54,7 @@
                     <InputSelect class="form-select" @bind-Value="Filtro">
                         <option value="" selected disabled>Elija una opci&oacute;n</option>
                         <option value="CotizacionId">CotizacionId</option>
+                        <option value="Fecha">Fecha</option>
                         <option value="ClienteId">ClienteId</option>
                         <option value="Observacion">Observacion</option>
                     </InputSelect>
@@ -54,6 +74,8 @@
                         <button type="button" class="btn btn-outline-secondary bi bi-arrow-clockwise" @onclick="Restablecer"></button>
                     </div>
                 </div>
+
+
                 @*Crear*@
                 <div class="col text-end">
                     <a href="/Cotizacion/Create">
@@ -68,7 +90,7 @@
                         <th>CotizacionId</th>
                         <th>Fecha</th>
                         <th>ClienteId</th>
-                        <th>Observacion</th>
+                        <th>Observaci&oacute;n</th>
                         <th>Monto</th>
                         <th>Ver</th>
                         <th>Editar</th>
@@ -81,7 +103,7 @@
                     {
                         <tr>
                             <td>@cotizacion.CotizacionId</td>
-                            <td>@cotizacion.Fecha</td>
+                            <td>@cotizacion.Fecha.ToShortDateString()</td>
                             <td>@cotizacion.ClienteId</td>
                             <td>@cotizacion.Observacion</td>
                             <td>@cotizacion.Monto.ToString("C", CultureInfo.CreateSpecificCulture("en-US"))</td>
@@ -108,12 +130,14 @@
         </div>
 
         @*Footer*@
-        <div class="card-footer">
-            <p><strong>Cantidad de cotizaciones: </strong>@ListaCotizaciones.Count</p>
+        <div class="card-footer space-between">
+            <label class="ms-3"><strong>Cantidad de cotizaciones: </strong>@ListaCotizaciones.Count</label>
+            <div class="col-5">
+                <label class="ms-5"><strong>Total</strong>$@ListaCotizaciones.Sum(c => c.Monto).ToString("N2")</label>
+            </div>
         </div>
     </div>
 </div>
-
 
 @code {
 
@@ -122,10 +146,14 @@
     public List<Prioridades> ListaPrioridades { get; set; } = new List<Prioridades>();
     public string Filtro { get; set; } = string.Empty;
     public string ValorFiltro { get; set; } = string.Empty;
+    public DateTime? Desde { get; set; }
+    public DateTime? Hasta { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         ListaCotizaciones = await cotizacionesService.Listar(c => c.CotizacionId > 0);
+        Desde = null;
+        Hasta = null;
     }
 
     private async Task Buscar()
@@ -144,7 +172,18 @@
             else if (Filtro == "Observacion")
             {
                 ListaCotizaciones = await cotizacionesService.Listar(o => o.Observacion.ToLower().Contains(ValorFiltro.ToLower()));
-            }          
+            }
+
+            else if (Filtro == "Fecha")
+            {
+                ListaCotizaciones = await cotizacionesService
+                .Listar(f => f.Fecha >= Desde && f.Fecha <= Hasta);
+            }
+            else if (ValorFiltro.Trim() != "" && Filtro == "Cliente")
+            {
+                ListaCotizaciones = await cotizacionesService
+                .Listar(c => c.Clientes.Nombres.ToLower().Contains(ValorFiltro.ToLower()));
+            }
         }
     }
 
@@ -153,5 +192,7 @@
         ListaCotizaciones = await cotizacionesService.Listar(c => c.CotizacionId > 0);
         Filtro = string.Empty;
         ValorFiltro = string.Empty;
+        Desde = null;
+        Hasta = null;
     }
 }
