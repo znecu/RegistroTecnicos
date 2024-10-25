@@ -10,7 +10,7 @@ public class CotizacionesDetalle
 
     [Required(ErrorMessage = "Este campo es obligatorio. ")]
     [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Este campo solo permite letras. ")]
-    public string? Cantidad { get; set; }
+    public int Cantidad { get; set; }
 
     [Required(ErrorMessage = "Este campo es obligatorio. ")]
     [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "Este campo solo permite números.")]
