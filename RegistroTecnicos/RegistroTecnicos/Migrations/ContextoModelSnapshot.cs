@@ -167,9 +167,8 @@ namespace RegistroTecnicos.Migrations
                     b.Property<int>("ArticuloId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Cantidad")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("int");
 
                     b.Property<int>("CotizacionId")
                         .HasColumnType("int");

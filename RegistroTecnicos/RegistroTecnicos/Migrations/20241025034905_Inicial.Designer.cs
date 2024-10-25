@@ -12,7 +12,7 @@ using RegistroTecnicos.DAL;
 namespace RegistroTecnicos.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20241023233152_Inicial")]
+    [Migration("20241025034905_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -170,9 +170,8 @@ namespace RegistroTecnicos.Migrations
                     b.Property<int>("ArticuloId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Cantidad")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("int");
 
                     b.Property<int>("CotizacionId")
                         .HasColumnType("int");
