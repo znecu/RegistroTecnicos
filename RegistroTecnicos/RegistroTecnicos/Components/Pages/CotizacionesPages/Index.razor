@@ -132,7 +132,7 @@
         @*Footer*@
         <div class="card-footer space-between">
             <label class="ms-3"><strong>Cantidad de cotizaciones: </strong>@ListaCotizaciones.Count</label>
-            <div class="col-5">
+            <div class="col-12 text-end ">
                 <label class="ms-5"><strong>Total</strong>$@ListaCotizaciones.Sum(c => c.Monto).ToString("N2")</label>
             </div>
         </div>
